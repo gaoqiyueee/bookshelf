@@ -1,12 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
-  "name": "bookshelf",
+  "name": "my-bookshelf",
   "compatibility_date": "2025-09-27",
   "compatibility_flags": ["nodejs_compat"],
   "minify": true,
   "keep_vars": true,
-  "workers_dev": false,
+  "workers_dev": true,
   "preview_urls": false,
   "assets": {
     "directory": ".open-next/assets",
@@ -15,7 +15,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "bookshelf"
+      "service": "my-bookshelf"
     }
   ],
   "observability": {
@@ -24,7 +24,7 @@
   "r2_buckets": [
     {
       "binding": "BOOKS",
-      "bucket_name": "books",
+      "bucket_name": "my-bookshelf",
       "jurisdiction": "eu"
     }
   ],
