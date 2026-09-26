@@ -20,8 +20,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run sync (first time only --create)
-        run: echo "Skip sync, R2 bucket created manually on Cloudflare dashboard"
+      # 新增：编译所有内部包，生成 packages/core/dist
+      - name: Build monorepo packages
+        run: npm run build
 
       - name: Deploy Cloudflare Worker
         env:
