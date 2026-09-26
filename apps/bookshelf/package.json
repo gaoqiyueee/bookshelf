@@ -18,7 +18,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "assets": "npx tsx --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/pdfjs-assets.ts",
+    "assets": "echo Skip pdfjs assets build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
