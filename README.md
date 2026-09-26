@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/murerkinn/bookshelf/actions/workflows/ci.yml/badge.svg)](https://github.com/murerkinn/bookshelf/actions/workflows/ci.yml)
 
-A self-hosted library for the ebooks you already own. Put your EPUBs and PDFs in
+A good self-hosted library for the ebooks you already own. Put your EPUBs and PDFs in
 a folder, publish them, and read them in any browser — or on your Kobo, through
 the [OPDS catalog](docs/opds.md).
 
