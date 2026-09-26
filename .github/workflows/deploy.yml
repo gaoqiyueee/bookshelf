@@ -1,38 +1,31 @@
-name: Build & Sync & Deploy Bookshelf
-
+name: Deploy Bookshelf
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     steps:
-      - name: Checkout source
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install system deps (cwebp + pdftoppm)
-        run: |
-          sudo apt update
-          sudo apt install -y webp poppler-utils
-
-      - name: Setup Node.js 22
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
 
-      - name: Install npm dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Ensure books directory exists
-        run: mkdir -p books
-
       - name: Run sync (first time only --create)
-        run: npm run sync -- --create
+        # run: npm run sync -- --create
+        run: echo "Skip sync, R2 bucket created manually on Cloudflare dashboard"
 
       - name: Deploy Cloudflare Worker
         run: npm run deploy
