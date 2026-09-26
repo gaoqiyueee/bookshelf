@@ -28,8 +28,7 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
       
-      # 全局安装tsx，用来直接跑ts脚本
-      - name: Install tsx
+      - name: Install tsx globally
         run: npm install -g tsx
 
       - name: Ensure books directory exists
