@@ -5,10 +5,6 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      R2_BUCKET: my-bookshelf
     steps:
       - uses: actions/checkout@v4
 
@@ -21,9 +17,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run sync with env passed explicitly
+      # 直接进入sync包目录，单独执行node，不再走顶层turbo脚本
+      - name: Run sync inside packages/sync
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_BUCKET: my-bookshelf
         run: |
-          export CLOUDFLARE_API_TOKEN="${{ secrets.CLOUDFLARE_API_TOKEN }}"
-          export CLOUDFLARE_ACCOUNT_ID="${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
-          export R2_BUCKET="my-bookshelf"
-          npm run sync -- --full
+          cd packages/sync
+          node ./dist/sync.js --full
