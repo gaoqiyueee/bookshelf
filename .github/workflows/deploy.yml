@@ -1,36 +1,38 @@
-name: Deploy Bookshelf
+name: Build & Sync & Deploy Bookshelf
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Install system deps
+      - name: Install system deps (cwebp + pdftoppm)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y webp poppler-utils
+          sudo apt update
+          sudo apt install -y webp poppler-utils
 
-      - name: Install dependencies
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install npm dependencies
         run: npm ci
 
-      - name: Publish books to R2
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Ensure books directory exists
+        run: mkdir -p books
+
+      - name: Run sync (first time only --create)
         run: npm run sync -- --create
 
-      - name: Build & deploy Worker
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy Cloudflare Worker
         run: npm run deploy
