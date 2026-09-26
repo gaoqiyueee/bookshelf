@@ -1,6 +1,6 @@
 name: Publish catalog
 on:
-  workflow_dispatch: # 手动点击运行
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -17,9 +17,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run sync（生成catalog并上传R2）
+      - name: Run sync with --full（跳过图片缩放）
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           R2_BUCKET: my-bookshelf
-        run: npm run sync
+        run: npm run sync -- --full
