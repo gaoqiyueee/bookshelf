@@ -4,7 +4,7 @@
   "coverHeight": 240,
   "storage": {
     "provider": "r2",
-    "bucket": "books",
+    "bucket": "my-bookshelf",
     "jurisdiction": "eu",
     "worker": "apps/bookshelf"
   }
